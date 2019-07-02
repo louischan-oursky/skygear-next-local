@@ -9,37 +9,33 @@ services:
     - skygear-auth-data:/var/lib/postgresql/data
 
   skygear-gateway:
-    image: quay.io/skygeario/skygear-gateway:git-596264c
+    image: quay.io/skygeario/skygear-gateway:git-ef8ac87
     depends_on:
     - 'skygear-db'
     ports:
     - '3000:3000'
     environment:
       HOST: '0.0.0.0:3000'
+      STANDALONE: 'true'
       AUTH_LIVE_URL: 'http://skygear-auth:3001'
-      STANDALONE_APP_NAME: 'auth'
-      STANDALONE_MASTER_KEY: 'master_key'
-      STANDALONE_DATABASE_URL: 'postgres://postgres:@skygear-db:5432/postgres?sslmode=disable'
-      STANDALONE_DEPLOYMENTROUTE_0_PATH: '/'
-      STANDALONE_DEPLOYMENTROUTE_0_BACKENDURL: 'http://myapp:3000'
+      STANDALONE_TENANT_CONFIG_FILE: '/standalone-tenant-config.yaml'
+    volumes:
+    - './standalone-tenant-config.yaml:/standalone-tenant-config.yaml'
 
   skygear-auth:
-    image: quay.io/skygeario/skygear-auth:git-596264c
+    image: quay.io/skygeario/skygear-auth:git-ef8ac87
     depends_on:
     - 'skygear-db'
-    ports:
-    - "3001:3001"
     environment:
       HOST: '0.0.0.0:3001'
-      DATABASE_URL: 'postgres://postgres:@skygear-db:5432/postgres?sslmode=disable'
-      STANDALONEMODE: 'true'
-      APP_NAME: 'auth'
-      API_KEY: 'api_key'
-      MASTER_KEY: 'master_key'
+      STANDALONE: 'true'
+      STANDALONE_TENANT_CONFIG_FILE: '/standalone-tenant-config.yaml'
+    volumes:
+    - './standalone-tenant-config.yaml:/standalone-tenant-config.yaml'
 
-  myapp:
+  myservice:
     build:
-      context: ./myapp
+      context: ./myservice
 
 volumes:
   skygear-auth-data: {}

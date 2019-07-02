@@ -2,7 +2,7 @@
 
 set -eu
 
-MIGRATE_IMAGE='quay.io/skygeario/skygear-migrate:git-596264c'
+MIGRATE_IMAGE='quay.io/skygeario/skygear-migrate:git-ef8ac87'
 DATABASE_URL='postgres://postgres:@host.docker.internal:5433/postgres?sslmode=disable'
 
 # Start the database and wait for it to be ready

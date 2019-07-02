@@ -1,0 +1,17 @@
+version: '1'
+app_name: auth
+app_config:
+  database_url: 'postgres://postgres:@skygear-db:5432/postgres?sslmode=disable'
+user_config:
+  api_key: apikey
+  master_key: masterkey
+deployment_routes:
+- type: http-service
+  path: /
+  type_config:
+    backend_url: 'http://myservice:3000'
+hooks:
+- async: false
+  timeout: 60
+  event: 'after_signup'
+  url: 'http://myservice:3000/after_signup'
